@@ -86,6 +86,8 @@ export class BarcodeScanningModalComponent
   public formats: BarcodeFormat[] = [];
   @Input()
   public lensFacing: LensFacing = LensFacing.Back;
+  @Input()
+  public initialTorchState: boolean = false
 
   @ViewChild('square')
   public squareElement: ElementRef<HTMLDivElement> | undefined;
@@ -195,6 +197,12 @@ export class BarcodeScanningModalComponent
       },
     );
     await BarcodeScanner.startScan(options);
+    // Uncomment following line for iOS torch to work correctly based on initialTorchState
+    // await new Promise(resolve => setTimeout(resolve, 200))
+    if(this.initialTorchState && !(await BarcodeScanner.isTorchEnabled()).enabled){
+      await BarcodeScanner.enableTorch();
+    }
+
     void BarcodeScanner.getMinZoomRatio().then((result) => {
       this.minZoomRatio = result.zoomRatio;
     });

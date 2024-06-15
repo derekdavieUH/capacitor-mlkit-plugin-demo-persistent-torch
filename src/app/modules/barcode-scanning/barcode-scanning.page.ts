@@ -73,6 +73,7 @@ export class BarcodeScanningPage implements OnInit {
       componentProps: {
         formats: formats,
         lensFacing: lensFacing,
+        initialTorchState: true,
       },
     });
     element.onDidDismiss().then((result) => {
